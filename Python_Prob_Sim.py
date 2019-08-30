@@ -124,4 +124,126 @@ sampling repeatedly and generating outcomes. """
 
 
 
+# Initialize model parameters & simulate dice throw
+die, probabilities, num_dice = [1,2,3,4,5,6], [1/6, 1/6, 1/6, 1/6, 1/6, 1/6], 2
+sims, wins = 100, 0
+
+for i in range(sims):
+    outcomes = np.random.choice(die, size=num_dice, p=probabilities) 
+    # Increment `wins` by 1 if the dice show same number
+    if outcomes[0] == outcomes[1]:
+        wins = wins + 1
+
+print("In {} games, you win {} times".format(sims, wins))
+
+
+
+""" Simulating one lottery drawing
+
+In the last three exercises of this chapter, we will be bringing together everything you've learned so far. We will run a complete simulation, take a decision based on our observed outcomes, and learn to modify inputs to the simulation model.
+
+We will use simulations to figure out whether or not we want to buy a lottery ticket. Suppose you have the opportunity to buy a lottery ticket which gives you a shot at a grand prize of 1𝑀𝑖𝑙𝑙𝑖𝑜𝑛.𝑆𝑖𝑛𝑐𝑒𝑡ℎ𝑒𝑟𝑒𝑎𝑟𝑒1000𝑡𝑖𝑐𝑘𝑒𝑡𝑠𝑖𝑛𝑡𝑜𝑡𝑎𝑙,𝑦𝑜𝑢𝑟𝑝𝑟𝑜𝑏𝑎𝑏𝑖𝑙𝑖𝑡𝑦𝑜𝑓𝑤𝑖𝑛𝑛𝑖𝑛𝑔𝑖𝑠1𝑖𝑛1000.𝐸𝑎𝑐ℎ𝑡𝑖𝑐𝑘𝑒𝑡𝑐𝑜𝑠𝑡𝑠
+10. Let's use our understanding of basic simulations to first simulate one drawing of the lottery. """
+
+
+# Pre-defined constant variables
+lottery_ticket_cost, num_tickets, grand_prize = 10, 1000, 1000000
+
+# Probability of winning
+chance_of_winning = 1/num_tickets
+
+# Simulate a single drawing of the lottery
+gains = [-lottery_ticket_cost, grand_prize-lottery_ticket_cost]
+
+probability = [1-chance_of_winning, chance_of_winning] 
+
+outcome = np.random.choice(a=gains, size=1, p=probability, replace=True)
+
+print("Outcome of one drawing of the lottery is {}".format(outcome))
+
+""" Should we buy?
+
+In the last exercise, we simulated the random drawing of the lottery ticket once. In this exercise, we complete the simulation process by repeating the process multiple times.
+
+Repeating the process gives us multiple outcomes. We can think of this as multiple universes where the same lottery drawing occurred. We can then determine the average winnings across all these universes. If the average winnings are greater than what we pay for the ticket then it makes sense to buy it, otherwise, we might not want to buy the ticket.
+
+This is typically how simulations are used for evaluating business investments. After completing this exercise, you will have the basic tools required to use simulations for decision-making.
+"""
+
+
+# Initialize size and simulate outcome
+lottery_ticket_cost, num_tickets, grand_prize = 10, 1000, 1000000
+chance_of_winning = 1/num_tickets
+size = 2000
+payoffs = [-lottery_ticket_cost, grand_prize-lottery_ticket_cost]
+probs = [1-chance_of_winning, chance_of_winning]
+
+outcomes = np.random.choice(a=payoffs, size=size, p=probs, replace=True)
+
+# Mean of outcomes.
+answer = outcomes.mean()
+print("Average payoff from {} simulations = {}".format(size, answer))
+
+""" Calculating a break-even lottery price
+
+Simulations allow us to ask more nuanced questions that might not necessarily have an easy analytical solution. Rather than solving a complex mathematical formula, we directly get multiple sample outcomes. We can run experiments by modifying inputs and studying how those changes impact the system. For example, once we have a moderately reasonable model of global weather patterns, we could evaluate the impact of increased greenhouse gas emissions.
+
+In the lottery example, we might want to know how expensive the ticket needs to be for it to not make sense to buy it. To understand this, we need to modify the ticket cost to see when the expected payoff is negative. """
+
+# Initialize size and simulate outcome
+lottery_ticket_cost, num_tickets, grand_prize = 10, 1000, 1000000
+chance_of_winning = 1/num_tickets
+size = 2000
+payoffs = [-lottery_ticket_cost, grand_prize-lottery_ticket_cost]
+probs = [1-chance_of_winning, chance_of_winning]
+
+outcomes = np.random.choice(a=payoffs, size=size, p=probs, replace=True)
+
+# Mean of outcomes.
+answer = outcomes.mean()
+print("Average payoff from {} simulations = {}".format(size, answer))
+
+# Calculating a break-even lottery price
+
+# Simulations allow us to ask more nuanced questions that might not necessarily have an easy analytical solution. Rather than solving a complex mathematical formula, we directly get multiple sample outcomes. We can run experiments by modifying inputs and studying how those changes impact the system. For example, once we have a moderately reasonable model of global weather patterns, we could evaluate the impact of increased greenhouse gas emissions.
+
+# In the lottery example, we might want to know how expensive the ticket needs to be for it to not make sense to buy it. To understand this, we need to modify the ticket cost to see when the expected payoff is negative.
+
+
+
+import matplotlib.pyplot as plt
+
+
+plt.hist(outcomes)
+
+
+""" Calculating a break-even lottery price
+
+Simulations allow us to ask more nuanced questions that might not necessarily have an easy analytical solution. Rather than solving a complex mathematical formula, we directly get multiple sample outcomes. We can run experiments by modifying inputs and studying how those changes impact the system. For example, once we have a moderately reasonable model of global weather patterns, we could evaluate the impact of increased greenhouse gas emissions.
+
+In the lottery example, we might want to know how expensive the ticket needs to be for it to not make sense to buy it. To understand this, we need to modify the ticket cost to see when the expected payoff is negative.
+"""
+
+# Initialize simulations and cost of ticket
+sims, lottery_ticket_cost = 3000, 0
+
+# Use a while loop to increment `lottery_ticket_cost` till average value of outcomes falls below zero
+while 1:
+    outcomes = np.random.choice([-lottery_ticket_cost, grand_prize-lottery_ticket_cost],
+                 size=sims, p=[1-chance_of_winning, chance_of_winning], replace=True)
+    if outcomes.mean() < 0:
+        break
+    else:
+        lottery_ticket_cost += 1
+        
+        
+answer = lottery_ticket_cost - 1
+
+print("The highest price at which it makes sense to buy the ticket is {}".format(answer))
+
+
+
+
+
+
 
